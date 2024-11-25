@@ -1,6 +1,6 @@
 {
-    "max_pages_search": 2,
-    "max_url_display": 20,
+    "max_pages_search": 1,
+    "max_url_display": 10,
     "default_category": "movies",
     "quality_filters": [
         "1080p",

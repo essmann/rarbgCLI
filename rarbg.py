@@ -5,6 +5,7 @@ import os
 import winreg as reg  # Import registry module for Windows
 import re
 import json
+from qbittorrent import add_magnet_to_qbittorrent
 
 config = {"max_pages_search": 2, 
           "max_url_display": 20,
@@ -61,8 +62,13 @@ params = {
 }
 def getMaxPages():
         max = 0
-        page_div = soup.find("div", id="pager_links")
-        page_tags = page_div.find_all("a")
+        try:
+             page_div = soup.find("div", id="pager_links")
+             page_tags = page_div.find_all("a")
+        except:
+            print("no pages found")
+            return 1
+        
         length = len(page_tags)
         for element in page_tags:
             if element.string != '>>' :
@@ -157,8 +163,24 @@ def displayUrls(max_display = 20):
         count+=1
         if count==max_display:
             break
-def getTorrent(url):
-    pass
+def getMagnet(url):
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+    td = soup.find("td", class_="lista")
+    magnet = td.find("a")["href"]
+    return magnet
+
+    
 displayUrls()
+print("Select a torrent: ")
+index = int(input())
+torrent_url = filtered_urls[index]["href"]
+
+magnet = getMagnet(torrent_url)
+
+add_magnet_to_qbittorrent(magnet)
+
+
+
 
 
