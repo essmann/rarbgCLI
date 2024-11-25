@@ -28,7 +28,7 @@ else:
     with open(filename, 'r') as f:
         config = json.load(f)
     print(f"Data loaded from {filename}.")
-print(config)
+
 testing = False
 quality = config["quality_filters"] if config["quality_filters"] else ["1080p", "2160p"]
 urls = []
@@ -52,7 +52,7 @@ if(not testing):
 try:
     name = sys.argv[1]
 except:
-    name = input("Invalid input. Select a Name and category: ")
+    name = input("Select media to download: ")
 
 params = {
     'search':  name,
@@ -66,7 +66,6 @@ def getMaxPages():
              page_div = soup.find("div", id="pager_links")
              page_tags = page_div.find_all("a")
         except:
-            print("no pages found")
             return 1
         
         length = len(page_tags)
@@ -99,8 +98,7 @@ def getUrls(page_number=1):
     else:
         url = 'https://rargb.to/search/{0}'.format(page_number)
     response = requests.get(url, params=params)
-    print("PAGE: ", page_number)
-    print("URL: ", response.url)
+    
 
     soup = BeautifulSoup(response.text, 'html.parser')
     tr = soup.find_all("tr", class_="lista2")
